@@ -29,7 +29,7 @@ https://github.com/joeknock90/Single-GPU-Passthrough
 Worth checking out, not used this.  
 https://github.com/QaidVoid/Complete-Single-GPU-Passthrough  
 
-For some unfortunate souls, such as me, the ACSO patch is needed. Arch Wiki comes to the rescue!
+For some unfortunate souls, such as me, the ACSO patch is needed. Arch Wiki comes to the rescue!  
 https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch)
 
 ###### KVM Optimization
