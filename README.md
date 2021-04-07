@@ -21,7 +21,7 @@ for g in `find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V`; do
     done;
 done;
 ```
-## Guides used
+## Guides
 ###### VFIO
 Huge parts of my setup is based on this guide.  
 https://github.com/joeknock90/Single-GPU-Passthrough  
@@ -36,7 +36,13 @@ https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Bypassing_the_IOMM
 One of many sources used to understand CPU pinning, can take time to understand this.  
 https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning  
 
-CPU Pinning for Ryzen 5 3600
+
+
+
+
+## Configuration
+###### KVM - CPU Pinning
+CPU Pinning for Ryzen 5 3600  
 ```XML
   <cputune>
     <vcpupin vcpu="0" cpuset="1"/>
@@ -51,8 +57,7 @@ CPU Pinning for Ryzen 5 3600
     <vcpupin vcpu="9" cpuset="11"/>
   </cputune>
 ```
-A core is left behind as a "house-keeping" core for Linux, performance in VM is really good.
-
+CPU Pinning locks CPU cores and threads to the VM. A core is left behind as a "house-keeping" core for Linux, performance in VM is really good. CPU Pin configuration is heavily based on the topology of your CPU. If you have a Ryzen 5 3600 like me, you should be able to use my configuration.
 ## Commands
 ###### Kernel Options
 Enables IOMMU for AMD CPUs, as well as enabling ACS for as many devices as possible.  
