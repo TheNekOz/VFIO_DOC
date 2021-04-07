@@ -32,3 +32,10 @@ https://github.com/QaidVoid/Complete-Single-GPU-Passthrough
 ###### KVM Optimization
 One of many sources used to understand CPU pinning, can take time to understand this.  
 https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning
+
+## Commands
+###### Kernel Options
+Appends the enabling of IOMMU for AMD CPUs, as well as enabling ACS for downstream devices
+```bash
+sudo kernelstub -a "amd_iommu=on amd_iommu=pt pcie_acs_override=downstream"
+```
