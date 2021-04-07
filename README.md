@@ -29,13 +29,17 @@ https://github.com/joeknock90/Single-GPU-Passthrough
 Worth checking out, not used this.  
 https://github.com/QaidVoid/Complete-Single-GPU-Passthrough  
 
+For some unfortunate souls, such as me, the ACSO patch is needed. Arch Wiki comes to the rescue!
+https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Bypassing_the_IOMMU_groups_(ACS_override_patch)
+
 ###### KVM Optimization
 One of many sources used to understand CPU pinning, can take time to understand this.  
 https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning
 
 ## Commands
 ###### Kernel Options
-Appends the enabling of IOMMU for AMD CPUs, as well as enabling ACS for downstream devices
+Enables IOMMU for AMD CPUs, as well as enabling ACS for as many devices as possible.  
+Probably not a good thing, but it works fine for now.
 ```bash
-sudo kernelstub -a "amd_iommu=on amd_iommu=pt pcie_acs_override=downstream"
+sudo kernelstub -a "amd_iommu=on amd_iommu=pt pcie_acs_override=downstream,multifunction"
 ```
