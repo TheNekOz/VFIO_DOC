@@ -34,7 +34,24 @@ https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Bypassing_the_IOMM
 
 ###### KVM Optimization
 One of many sources used to understand CPU pinning, can take time to understand this.  
-https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning
+https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning  
+
+CPU Pinning for Ryzen 5 3600
+```XML
+  <cputune>
+    <vcpupin vcpu="0" cpuset="1"/>
+    <vcpupin vcpu="1" cpuset="7"/>
+    <vcpupin vcpu="2" cpuset="2"/>
+    <vcpupin vcpu="3" cpuset="8"/>
+    <vcpupin vcpu="4" cpuset="3"/>
+    <vcpupin vcpu="5" cpuset="9"/>
+    <vcpupin vcpu="6" cpuset="4"/>
+    <vcpupin vcpu="7" cpuset="10"/>
+    <vcpupin vcpu="8" cpuset="5"/>
+    <vcpupin vcpu="9" cpuset="11"/>
+  </cputune>
+```
+A core is left behind as a "house-keeping" core for Linux, performance in VM is really good.
 
 ## Commands
 ###### Kernel Options
