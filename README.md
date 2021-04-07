@@ -23,9 +23,12 @@ done;
 ```
 ## Guides used
 ###### VFIO
+Huge parts of my setup is based on this guide.  
+https://github.com/joeknock90/Single-GPU-Passthrough  
 
-https://github.com/joeknock90/Single-GPU-Passthrough - Huge parts of my setup is based on this guide.
-
-https://github.com/QaidVoid/Complete-Single-GPU-Passthrough - Worth checking out, not used this.
+Worth checking out, not used this.  
+https://github.com/QaidVoid/Complete-Single-GPU-Passthrough  
 
 ###### KVM Optimization
+One of many sources used to understand CPU pinning, can take time to understand this.  
+https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning
