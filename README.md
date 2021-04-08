@@ -6,6 +6,9 @@ Ryzen 5 3600
 GTX 1070ti  
 32gb DDR4  
 
+## Distro
+PopOS
+
 ## Useful Scripts
 Convenient script to get latest version on Ubuntu/PopOS, comes with easy option to add ACS Override patch  
 https://gist.github.com/mdPlusPlus/031ec2dac2295c9aaf1fc0b0e808e21a
