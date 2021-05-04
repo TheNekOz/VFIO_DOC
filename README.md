@@ -25,7 +25,7 @@ for g in `find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V`; do
 done;
 ```
 ## Guides
-###### VFIO
+##### VFIO
 Huge parts of my setup is based on this guide.  
 https://github.com/joeknock90/Single-GPU-Passthrough  
 
@@ -44,7 +44,7 @@ https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning
 
 
 ## Configuration
-###### KVM - CPU Pinning
+##### KVM - CPU Pinning
 CPU Pinning for Ryzen 5 3600  
 ```XML
   <cputune>
@@ -61,8 +61,89 @@ CPU Pinning for Ryzen 5 3600
   </cputune>
 ```
 CPU Pinning locks CPU cores and threads to the VM. A core is left behind as a "house-keeping" core for Linux, performance in VM is really good. CPU Pin configuration is heavily based on the topology of your CPU. If you have a Ryzen 5 3600 like me, you should be able to use my configuration.
+##### Libvirt scripts
+**/etc/libvirt/hooks/qemu.d/[vm_name]/prepare/begin/start.sh**  
+```bash
+
+#!/bin/bash
+# Helpful to read output when debugging
+set -x
+
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+for file in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo "performance" > $file; done
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+# Start Samba Service
+systemctl start smbd
+# Start OpenSSH Server
+systemctl start sshd
+# Stop display manager
+systemctl stop display-manager.service
+## Uncomment the following line if you use GDM
+killall gdm-x-session
+
+# Unbind VTconsoles
+echo 0 > /sys/class/vtconsole/vtcon0/bind
+
+# Unbind EFI-Framebuffer
+echo efi-framebuffer.0 > /sys/bus/platform/drivers/efi-framebuffer/unbind
+
+# Avoid a Race condition by waiting 2 seconds. This can be calibrated to be shorter or longer if required for your system
+sleep 3
+
+# Unload all Nvidia drivers
+modprobe -r nvidia_drm
+modprobe -r nvidia_modeset
+modprobe -r nvidia_uvm
+modprobe -r nvidia
+
+# Unbind the GPU from display driver
+virsh nodedev-detach pci_0000_08_00_0
+virsh nodedev-detach pci_0000_08_00_1
+
+# Load VFIO Kernel Module  
+modprobe vfio-pci  
+```
+**/etc/libvirt/hooks/qemu.d/[vm_name]/release/end/revert.sh**  
+```bash
+#!/bin/bash
+set -x
+
+#Revert to On Demand governor
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+for file in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo "ondemand" > $file; done
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+#Stop samba service
+systemctl stop smbd
+
+# Unload VFIO-PCI Kernel Driver
+modprobe -r vfio-pci
+modprobe -r vfio_iommu_type1
+modprobe -r vfio
+  
+# Re-Bind GPU to Nvidia Driver
+virsh nodedev-reattach pci_0000_08_00_1
+virsh nodedev-reattach pci_0000_08_00_0
+
+# Rebind VT consoles
+echo 1 > /sys/class/vtconsole/vtcon0/bind
+# Some machines might have more than 1 virtual console. Add a line for each corresponding VTConsole
+#echo 1 > /sys/class/vtconsole/vtcon1/bind
+
+nvidia-xconfig --query-gpu-info > /dev/null 2>&1
+echo "efi-framebuffer.0" > /sys/bus/platform/drivers/efi-framebuffer/bind
+
+modprobe nvidia_drm
+modprobe nvidia_modeset
+modprobe nvidia_uvm
+modprobe nvidia
+
+# Restart Display Manager
+systemctl start display-manager.service
+```
 ## Commands
-###### Kernel Options
+##### Kernel Options
 Enables IOMMU for AMD CPUs, as well as enabling ACS for as many devices as possible.  
 Probably not a good thing, but it works fine for now.
 ```bash
