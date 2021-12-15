@@ -1,5 +1,6 @@
 # VFIO_DOC
 Personal Single GPU Passthrough Setup
+This is unfinished, but I am making this publicly available hoping this is a decent resource.
 
 ## Specs  
 Ryzen 5 3600  
