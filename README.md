@@ -1,6 +1,6 @@
 # VFIO_DOC
 Personal Single GPU Passthrough Setup
-This is unfinished, but I am making this publicly available hoping this is a decent resource.
+This is mostly notes for personal usage, but I have made this public hoping it's useful for other people.  
 
 ## Specs  
 Ryzen 5 3600  
@@ -12,8 +12,8 @@ PopOS
 
 ## Useful Scripts
 Convenient script to get latest kernel on Ubuntu/PopOS, comes with easy option to add ACS Override patch  
-https://gist.github.com/mdPlusPlus/031ec2dac2295c9aaf1fc0b0e808e21a
-
+https://gist.github.com/mdPlusPlus/031ec2dac2295c9aaf1fc0b0e808e21a  
+Kernel used by PopOS should has ACSO Patch on by default afaik.
 Decent script for viewing iommu groups, will link to original source if I find it.
 ```bash
 #!/bin/bash
@@ -40,14 +40,11 @@ https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Bypassing_the_IOMM
 One of many sources used to understand CPU pinning, can take time to understand this.  
 https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#CPU_pinning  
 
-
-
-
-
 ## Configuration
 ##### KVM - CPU Pinning
 CPU Pinning for Ryzen 5 3600  
 ```XML
+  <vcpu placement="static">10</vcpu>
   <cputune>
     <vcpupin vcpu="0" cpuset="1"/>
     <vcpupin vcpu="1" cpuset="7"/>
